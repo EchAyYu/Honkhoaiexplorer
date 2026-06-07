@@ -1,13 +1,14 @@
 import { useState, useEffect } from "react";
 import { Compass, Phone, ChevronDown } from "lucide-react";
+import { Link } from "react-router";
 
 const navLinks = [
-  { label: "Trang Chủ", active: true, dropdown: false },
-  { label: "Giới Thiệu", active: false, dropdown: false },
-  { label: "Tour Du Lịch", active: false, dropdown: true },
-  { label: "Thông Tin", active: false, dropdown: false },
-  { label: "Tin Tức", active: false, dropdown: false },
-  { label: "Liên Hệ", active: false, dropdown: false },
+  { label: "Trang Chủ", active: true, dropdown: false, href: "/" },
+  { label: "Giới Thiệu", active: false, dropdown: false, href: "/about" },
+  { label: "Tour Du Lịch", active: false, dropdown: true, href: "/tours" },
+  { label: "Thông Tin", active: false, dropdown: false, href: "/info" },
+  { label: "Tin Tức", active: false, dropdown: false, href: "/news" },
+  { label: "Liên Hệ", active: false, dropdown: false, href: "/contact" },
 ];
 
 export function HpNavbar() {
@@ -38,7 +39,7 @@ export function HpNavbar() {
         style={{ maxWidth: "1440px", margin: "0 auto", padding: "0 64px" }}
       >
         {/* Logo */}
-        <a href="#" className="flex items-center gap-3 shrink-0">
+        <Link to="/" className="flex items-center gap-3 shrink-0">
           <div
             className="w-10 h-10 rounded-xl flex items-center justify-center"
             style={{ backgroundColor: "#F39C12" }}
@@ -59,30 +60,33 @@ export function HpNavbar() {
               EXPLORER
             </div>
           </div>
-        </a>
+        </Link>
 
         {/* Nav links */}
         <div className="hidden lg:flex items-center gap-7">
-          {navLinks.map((link) => (
-            <a
-              key={link.label}
-              href="#"
-              className="flex items-center gap-1 text-sm relative group transition-colors duration-150"
-              style={{
-                fontFamily: "Inter, sans-serif",
-                color: link.active ? "#F39C12" : "rgba(255,255,255,0.85)",
-                fontWeight: link.active ? 600 : 400,
-              }}
-            >
-              {link.label}
-              {link.dropdown && <ChevronDown size={13} />}
-              {/* hover underline */}
-              <span
-                className="absolute -bottom-1 left-0 h-px bg-amber-400 transition-all duration-300 group-hover:w-full"
-                style={{ width: link.active ? "100%" : "0" }}
-              />
-            </a>
-          ))}
+          {navLinks.map((link) => {
+            const isActive = window.location.pathname === link.href || (link.href === '/' && window.location.pathname === '') || (link.href !== '/' && link.href.startsWith('/') && window.location.pathname.startsWith(link.href));
+            return (
+              <Link
+                key={link.label}
+                to={link.href}
+                className="flex items-center gap-1 text-sm relative group transition-colors duration-150"
+                style={{
+                  fontFamily: "Inter, sans-serif",
+                  color: isActive ? "#F39C12" : "rgba(255,255,255,0.85)",
+                  fontWeight: isActive ? 600 : 400,
+                }}
+              >
+                {link.label}
+                {link.dropdown && <ChevronDown size={13} />}
+                {/* hover underline */}
+                <span
+                  className="absolute -bottom-1 left-0 h-px bg-amber-400 transition-all duration-300 group-hover:w-full"
+                  style={{ width: isActive ? "100%" : "0" }}
+                />
+              </Link>
+            );
+          })}
         </div>
 
         {/* Right side */}

@@ -1,53 +1,26 @@
-import { HpNavbar } from "./components/hp-navbar";
-import { HpHero } from "./components/hp-hero";
-import { HpAbout } from "./components/hp-about";
-import { HpTours } from "./components/hp-tours";
-import { HpWhy } from "./components/hp-why";
-import { HpGallery } from "./components/hp-gallery";
-import { HpTravelInfo } from "./components/hp-travel-info";
-import { HpTestimonials } from "./components/hp-testimonials";
-import { HpBlog } from "./components/hp-blog";
-import { HpCta } from "./components/hp-cta";
-import { HpFooter } from "./components/hp-footer";
+import { BrowserRouter, Routes, Route } from "react-router";
+import HomePage from "./pages/HomePage";
+import AboutPage from "./pages/AboutPage";
+import ToursPage from "./pages/ToursPage";
+import TourDetailPage from "./pages/TourDetailPage";
+import TravelInfoPage from "./pages/TravelInfoPage";
+import NewsBlogPage from "./pages/NewsBlogPage";
+import ArticleDetailPage from "./pages/ArticleDetailPage";
+import ContactPage from "./pages/ContactPage";
 
 export default function App() {
   return (
-    <div
-      className="w-full min-h-screen"
-      style={{ fontFamily: "Inter, sans-serif", backgroundColor: "#EAF4FB" }}
-    >
-      {/* Section 1 — Fixed Navbar */}
-      <HpNavbar />
-
-      {/* Section 2 — Hero (100vh) */}
-      <HpHero />
-
-      {/* Section 3 — About */}
-      <HpAbout />
-
-      {/* Section 4 — Featured Tours */}
-      <HpTours />
-
-      {/* Section 5 — Why Choose Us */}
-      <HpWhy />
-
-      {/* Section 6 — Photo Gallery (Bento) */}
-      <HpGallery />
-
-      {/* Section 7 — Travel Info */}
-      <HpTravelInfo />
-
-      {/* Section 8 — Testimonials */}
-      <HpTestimonials />
-
-      {/* Section 9 — Blog */}
-      <HpBlog />
-
-      {/* Section 10 — CTA Banner */}
-      <HpCta />
-
-      {/* Section 11 — Footer */}
-      <HpFooter />
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/about" element={<AboutPage />} />
+        <Route path="/tours" element={<ToursPage />} />
+        <Route path="/tour/:id" element={<TourDetailPage />} />
+        <Route path="/info" element={<TravelInfoPage />} />
+        <Route path="/news" element={<NewsBlogPage />} />
+        <Route path="/news/:id" element={<ArticleDetailPage />} />
+        <Route path="/contact" element={<ContactPage />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
