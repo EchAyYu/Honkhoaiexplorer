@@ -515,13 +515,13 @@ export default function ContactPage() {
 
             {/* Card 3 - ĐẶT TOUR TRỰC TUYẾN */}
             <div className="border border-[#EAF4FB] rounded-2xl p-8 hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all bg-white relative">
-              <div className="absolute top-6 right-6 bg-[#1E8449] text-white text-[10px] font-bold px-3 py-1.5 rounded-full tracking-wider uppercase">
-                ONLINE 24/7
-              </div>
               <div className="w-full h-[160px] bg-[#EAF4FB] rounded-xl mb-6 relative overflow-hidden flex items-center justify-center text-[#0A3D62]">
                 <MessageCircle size={48} className="mr-2" />
                 <Plus size={20} className="mb-8 font-bold" />
                 <PhoneCall size={32} className="ml-2" />
+                <div className="absolute top-4 right-4 z-20 bg-[#1E8449] text-white text-[10px] font-bold px-3 py-1.5 rounded-full tracking-wider uppercase shadow-sm">
+                  ONLINE 24/7
+                </div>
               </div>
               <h4 className="font-bold text-gray-900 text-xl mb-3">Đặt Tour Trực Tuyến</h4>
               <p className="text-sm text-gray-600 mb-6 leading-relaxed">
