@@ -1,4 +1,4 @@
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
 import { ChevronRight, Calendar, Clock, Eye, Share2, Facebook, Twitter, Link as LinkIcon, CheckCircle2, AlertTriangle, Lightbulb } from "lucide-react";
 import { HpNavbar } from "../components/hp-navbar";
 import { HpFooter } from "../components/hp-footer";

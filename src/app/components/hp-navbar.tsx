@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Compass, Phone, ChevronDown } from "lucide-react";
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
 
 const navLinks = [
   { label: "Trang Chủ", active: true, dropdown: false, href: "/" },

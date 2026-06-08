@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
 import { Phone, MessageCircle, Mail, MapPin, ChevronRight, Calendar, Users, CheckCircle2, Facebook, Instagram, Youtube, PhoneCall, Check, Plus, Minus, Clock } from "lucide-react";
 import { HpNavbar } from "../components/hp-navbar";
 import { HpFooter } from "../components/hp-footer";

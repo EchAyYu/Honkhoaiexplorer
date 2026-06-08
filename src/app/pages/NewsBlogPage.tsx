@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
 import { Search, Calendar, Clock, Eye, Share2, Mail, ChevronRight, ChevronLeft } from "lucide-react";
 import { HpNavbar } from "../components/hp-navbar";
 import { HpFooter } from "../components/hp-footer";

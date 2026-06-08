@@ -1,7 +1,7 @@
 import { Search, ChevronRight, Filter, Star, MapPin, Clock, Utensils, Ship, Camera, Tent, Fish, ChevronDown } from "lucide-react";
 import { HpNavbar } from "../components/hp-navbar";
 import { HpFooter } from "../components/hp-footer";
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
 
 export default function ToursPage() {
   return (

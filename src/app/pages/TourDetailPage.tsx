@@ -2,7 +2,7 @@ import { useState } from "react";
 import { ChevronRight, Star, Clock, Users, MapPin, CalendarDays, CheckCircle2, XCircle, ChevronDown, ChevronUp, Plus, Minus, Lock, MessageCircle, PhoneCall, Share, Heart, Check } from "lucide-react";
 import { HpNavbar } from "../components/hp-navbar";
 import { HpFooter } from "../components/hp-footer";
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
 
 export default function TourDetailPage() {
   const [activeTab, setActiveTab] = useState("overview");

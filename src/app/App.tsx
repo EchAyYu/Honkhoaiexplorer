@@ -1,4 +1,6 @@
-import { BrowserRouter, Routes, Route } from "react-router";
+console.log("🟢 APP.TSX IMPORT THÀNH CÔNG!");
+
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import AboutPage from "./pages/AboutPage";
 import ToursPage from "./pages/ToursPage";
@@ -9,6 +11,7 @@ import ArticleDetailPage from "./pages/ArticleDetailPage";
 import ContactPage from "./pages/ContactPage";
 
 export default function App() {
+  console.log("✅ App component đang render!");
   return (
     <BrowserRouter>
       <Routes>

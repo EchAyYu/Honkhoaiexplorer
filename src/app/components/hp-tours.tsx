@@ -1,51 +1,7 @@
-import { useState } from "react";
+console.log("🔥🔥🔥 HP-TOURS.TSX FILE ĐÃ ĐƯỢC LOAD !!! 🔥🔥🔥");
+
+import { useState, useEffect } from "react";
 import { MapPin, Clock, Utensils, Ship, Tent, Waves, ArrowRight } from "lucide-react";
-
-const IMG_1 = "https://images.unsplash.com/photo-1780397566138-50945af79e24?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=600&h=260&q=80";
-const IMG_2 = "https://images.unsplash.com/photo-1583212292454-1fe6229603b7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=600&h=260&q=80";
-const IMG_3 = "https://images.unsplash.com/photo-1612971432130-04d239cb6706?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=600&h=260&q=80";
-const IMG_4 = "https://images.unsplash.com/photo-1773589972650-1bbfe8d12c79?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=600&h=260&q=80";
-const IMG_5 = "https://images.unsplash.com/photo-1767825489875-757583e74fff?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=600&h=260&q=80";
-const IMG_6 = "https://images.unsplash.com/photo-1515555585025-54136276b6e3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=600&h=260&q=80";
-
-const allTours = [
-  {
-    id: 1, image: IMG_1, badge: "HOT", category: "1-day",
-    duration: "1 Ngày", name: "Hòn Khoai Khám Phá Một Ngày",
-    rating: 5, reviews: 128, location: "Cà Mau City",
-    price: "850.000", includes: [Utensils, Ship, Waves],
-  },
-  {
-    id: 2, image: IMG_4, badge: "HOT", category: "2-3-day",
-    duration: "2 Ngày 1 Đêm", name: "Hòn Khoai Hoàng Hôn & Bình Minh",
-    rating: 5, reviews: 96, location: "Cà Mau City",
-    price: "1.850.000", includes: [Utensils, Ship, Tent, Waves],
-  },
-  {
-    id: 3, image: IMG_2, badge: "NEW", category: "dive",
-    duration: "1 Ngày", name: "Lặn Biển San Hô Hòn Khoai",
-    rating: 4.9, reviews: 54, location: "Cà Mau City",
-    price: "1.200.000", includes: [Utensils, Ship, Waves],
-  },
-  {
-    id: 4, image: IMG_3, badge: null, category: "eco",
-    duration: "1 Ngày", name: "Rừng Ngập Mặn U Minh Hạ",
-    rating: 4.8, reviews: 87, location: "Cà Mau City",
-    price: "650.000", includes: [Utensils, Ship],
-  },
-  {
-    id: 5, image: IMG_5, badge: "HOT", category: "2-3-day",
-    duration: "3 Ngày 2 Đêm", name: "Combo Cà Mau — Hòn Khoai Trọn Gói",
-    rating: 5, reviews: 42, location: "Cà Mau City",
-    price: "3.200.000", includes: [Utensils, Ship, Tent, Waves],
-  },
-  {
-    id: 6, image: IMG_6, badge: "NEW", category: "dive",
-    duration: "1 Ngày", name: "Câu Cá & Lặn Ngắm San Hô",
-    rating: 4.7, reviews: 31, location: "Cà Mau City",
-    price: "980.000", includes: [Utensils, Ship, Waves],
-  },
-];
 
 const tabs = [
   { label: "Tất Cả ✓", key: "all" },
@@ -73,16 +29,61 @@ function StarRow({ rating }: { rating: number }) {
 
 export function HpTours() {
   const [active, setActive] = useState("all");
+  const [tours, setTours] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchTours = async () => {
+      try {
+        console.log("Fetching tours...");
+        const response = await fetch('/api/tours?limit=6');
+        console.log("Response status:", response.status);
+        const data = await response.json();
+        console.log("Data:", data);
+        setTours(data.tours || []);
+      } catch (error) {
+        console.error('Error fetching tours:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchTours();
+  }, []);
+  
+  console.log("✅ HpTours component đang render!");
+  
+  const mappedTours = tours.map((tour: any, index: number) => ({
+    id: tour.id,
+    slug: tour.slug,
+    image: tour.featured_image || `https://images.unsplash.com/photo-1780397566138-50945af79e24?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=600&h=260&q=80`,
+    badge: index < 2 ? "HOT" : null,
+    category: tour.duration_days === 1 ? "1-day" : tour.duration_days <= 3 ? "2-3-day" : "dive",
+    duration: `${tour.duration_days} Ngày`,
+    name: tour.title,
+    rating: 5,
+    reviews: tour.view_count || 0,
+    location: tour.location || "Cà Mau City",
+    price: tour.price.toLocaleString('vi-VN'),
+    includes: [Utensils, Ship, Waves].slice(0, tour.duration_days || 2),
+  }));
 
   const filtered = active === "all"
-    ? allTours
-    : allTours.filter((t) => t.category === active);
+    ? mappedTours
+    : mappedTours.filter((t) => t.category === active);
+
+  if (loading) {
+    return (
+      <section id="tours" style={{ backgroundColor: "#EAF4FB", padding: "100px 0" }}>
+        <div style={{ maxWidth: "1440px", margin: "0 auto", padding: "0 80px" }}>
+          <div className="text-center">Đang tải dữ liệu tours...</div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section id="tours" style={{ backgroundColor: "#EAF4FB", padding: "100px 0" }}>
       <div style={{ maxWidth: "1440px", margin: "0 auto", padding: "0 80px" }}>
-
-        {/* Section header */}
         <div className="flex flex-col items-center text-center gap-4 mb-12">
           <span style={{ fontFamily: "Inter, sans-serif", fontSize: "13px", fontWeight: 500, letterSpacing: "3px", textTransform: "uppercase", color: "#1E8449" }}>
             TOUR DU LỊCH
@@ -95,7 +96,6 @@ export function HpTours() {
           </p>
         </div>
 
-        {/* Filter tabs */}
         <div className="flex items-center justify-center gap-3 mb-10 flex-wrap">
           {tabs.map((t) => (
             <button
@@ -115,7 +115,6 @@ export function HpTours() {
           ))}
         </div>
 
-        {/* Tour grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filtered.map((tour) => (
             <div
@@ -123,7 +122,6 @@ export function HpTours() {
               className="bg-white rounded-[12px] overflow-hidden flex flex-col transition-all duration-300 hover:-translate-y-1.5 hover:shadow-2xl"
               style={{ boxShadow: "0px 8px 32px rgba(10,61,98,0.10)" }}
             >
-              {/* Photo */}
               <div className="relative overflow-hidden bg-sky-100" style={{ height: "240px" }}>
                 <img src={tour.image} alt={tour.name} className="w-full h-full object-cover transition-transform duration-500 hover:scale-105" />
                 {tour.badge && (
@@ -136,7 +134,6 @@ export function HpTours() {
                 )}
               </div>
 
-              {/* Body */}
               <div className="p-6 flex flex-col gap-3 flex-1">
                 <div className="flex items-center gap-1.5" style={{ color: "#555F6B" }}>
                   <Clock size={13} />
@@ -163,15 +160,13 @@ export function HpTours() {
 
                 <div style={{ height: "1px", backgroundColor: "rgba(10,61,98,0.1)" }} />
 
-                {/* Includes */}
                 <div className="flex items-center gap-3">
                   <span style={{ fontFamily: "Inter, sans-serif", fontSize: "11px", color: "#555F6B" }}>Bao gồm:</span>
-                  {tour.includes.map((Icon, i) => (
+                  {tour.includes.map((Icon: any, i: number) => (
                     <Icon key={i} size={15} style={{ color: "#0A3D62" }} />
                   ))}
                 </div>
 
-                {/* Price */}
                 <div className="flex items-end gap-1 mt-1">
                   <span style={{ fontFamily: "Inter, sans-serif", fontSize: "12px", color: "#555F6B" }}>Từ</span>
                   <span style={{ fontFamily: "Inter, sans-serif", fontSize: "22px", fontWeight: 700, color: "#0A3D62", lineHeight: 1 }}>
@@ -180,19 +175,20 @@ export function HpTours() {
                   <span style={{ fontFamily: "Inter, sans-serif", fontSize: "12px", color: "#555F6B", marginBottom: "2px" }}>/người</span>
                 </div>
 
-                {/* Buttons */}
                 <div className="flex gap-2.5 mt-auto pt-1">
-                  <button
-                    className="flex-1 py-2.5 rounded-full text-sm font-semibold transition-all duration-200 hover:bg-blue-50"
+                  <a
+                    href={`/tours/${tour.slug}`}
+                    className="flex-1 py-2.5 rounded-full text-sm font-semibold transition-all duration-200 text-center no-underline"
                     style={{
                       border: "1.5px solid #0A3D62",
                       color: "#0A3D62",
                       fontFamily: "Inter, sans-serif",
                       background: "transparent",
+                      textDecoration: "none",
                     }}
                   >
                     Xem Chi Tiết
-                  </button>
+                  </a>
                   <button
                     className="flex-1 py-2.5 rounded-full text-sm font-semibold transition-all duration-200 hover:brightness-110 active:scale-95"
                     style={{
@@ -209,20 +205,21 @@ export function HpTours() {
           ))}
         </div>
 
-        {/* View all */}
         <div className="flex justify-center mt-10">
-          <button
-            className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full font-semibold text-sm transition-all duration-200 hover:bg-blue-900 hover:text-white group"
+          <a
+            href="/tours"
+            className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full font-semibold text-sm transition-all duration-200 hover:bg-blue-900 hover:text-white group no-underline"
             style={{
               border: "2px solid #0A3D62",
               color: "#0A3D62",
               fontFamily: "Inter, sans-serif",
               background: "transparent",
+              textDecoration: "none",
             }}
           >
             Xem Tất Cả Tour
             <ArrowRight size={15} className="transition-transform duration-200 group-hover:translate-x-1" />
-          </button>
+          </a>
         </div>
       </div>
     </section>

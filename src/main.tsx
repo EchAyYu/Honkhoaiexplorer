@@ -1,7 +1,15 @@
+console.log("🔴 MAIN.TSX ĐANG CHẠY!");
 
-  import { createRoot } from "react-dom/client";
-  import App from "./app/App.tsx";
-  import "./styles/index.css";
+import { createRoot } from "react-dom/client";
+import App from "./app/App.tsx";
+import "./styles/index.css";
 
-  createRoot(document.getElementById("root")!).render(<App />);
-  
+const rootElement = document.getElementById("root");
+console.log("🔴 Root element:", rootElement);
+
+if (rootElement) {
+  console.log("🔴 Đang render App...");
+  createRoot(rootElement).render(<App />);
+} else {
+  console.error("🔴 Không tìm thấy element #root!");
+}
