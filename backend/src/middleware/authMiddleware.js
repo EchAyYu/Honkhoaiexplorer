@@ -1,22 +1,38 @@
 import jwt from 'jsonwebtoken';
+import pool from '../config/database.js';
 
-export const protect = (req, res, next) => {
+export const protect = async (req, res, next) => {
     const token = req.headers.authorization?.split(' ')[1];
 
     if (!token) {
-        return res.status(401).json({ error: 'Not authorized' });
+        return res.status(401).json({ error: 'Not authorized, no token' });
     }
 
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        req.user = decoded;
+
+        // Get user from database
+        const { rows } = await pool.query(
+            'SELECT id, email, full_name, role FROM users WHERE id = $1',
+            [decoded.id]
+        );
+
+        if (rows.length === 0) {
+            return res.status(401).json({ error: 'User not found' });
+        }
+
+        req.user = rows[0];
         next();
     } catch (error) {
-        res.status(401).json({ error: 'Invalid token' });
+        console.error('Auth error:', error);
+        res.status(401).json({ error: 'Not authorized, invalid token' });
     }
 };
 
 export const adminOnly = (req, res, next) => {
-    // We'll get user role from database
-    next();
+    if (req.user && req.user.role === 'admin') {
+        next();
+    } else {
+        res.status(403).json({ error: 'Access denied. Admin only.' });
+    }
 };

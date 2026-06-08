@@ -6,6 +6,8 @@ import dotenv from 'dotenv';
 import pool from './src/config/database.js';
 import authRoutes from './src/routes/authRoutes.js';
 import tourRoutes from './src/routes/tourRoutes.js';
+import bookingRoutes from './src/routes/bookingRoutes.js';
+import contactRoutes from './src/routes/contactRoutes.js';
 
 dotenv.config();
 
@@ -20,6 +22,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use('/api/auth', authRoutes);
 app.use('/api/tours', tourRoutes);
+app.use('/api/bookings', bookingRoutes);
+app.use('/api/contacts', contactRoutes);
+
 
 // Test API
 app.get('/api/health', (req, res) => {
