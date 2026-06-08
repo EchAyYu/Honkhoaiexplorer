@@ -9,6 +9,8 @@ import tourRoutes from './src/routes/tourRoutes.js';
 import bookingRoutes from './src/routes/bookingRoutes.js';
 import contactRoutes from './src/routes/contactRoutes.js';
 import blogRoutes from './src/routes/blogRoutes.js';
+import uploadRoutes from './src/routes/uploadRoutes.js';
+import testimonialRoutes from './src/routes/testimonialRoutes.js';
 
 dotenv.config();
 
@@ -26,6 +28,8 @@ app.use('/api/tours', tourRoutes);
 app.use('/api/bookings', bookingRoutes);
 app.use('/api/contact', contactRoutes);
 app.use('/api/blogs', blogRoutes);
+app.use('/api/upload', uploadRoutes);
+app.use('/api/testimonials', testimonialRoutes);
 
 // Test API
 app.get('/api/health', (req, res) => {
