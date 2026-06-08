@@ -23,7 +23,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/api/auth', authRoutes);
 app.use('/api/tours', tourRoutes);
 app.use('/api/bookings', bookingRoutes);
-app.use('/api/contacts', contactRoutes);
+app.use('/api/contact', contactRoutes);
 
 
 // Test API
