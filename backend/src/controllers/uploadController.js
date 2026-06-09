@@ -1,7 +1,7 @@
 import { v2 as cloudinary } from 'cloudinary';
-import { CloudinaryStorage } from 'multer-storage-cloudinary';
 import multer from 'multer';
 import dotenv from 'dotenv';
+import { CloudinaryStorage } from 'multer-storage-cloudinary';
 
 dotenv.config();
 
@@ -12,17 +12,33 @@ cloudinary.config({
     api_secret: process.env.CLOUDINARY_API_SECRET
 });
 
-// Configure storage
-const storage = new CloudinaryStorage({
-    cloudinary: cloudinary,
-    params: {
-        folder: 'honkhoai',
-        allowed_formats: ['jpg', 'jpeg', 'png', 'webp', 'gif'],
-        transformation: [{ width: 1200, height: 800, crop: 'limit' }]
-    }
+// Kiểm tra config
+console.log('Cloudinary configured with:', {
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY ? '✓' : '✗',
+    api_secret: process.env.CLOUDINARY_API_SECRET ? '✓' : '✗'
 });
 
-const upload = multer({ storage: storage });
+// Configure storage
+let storage;
+try {
+    storage = new CloudinaryStorage({
+        cloudinary: cloudinary,
+        params: {
+            folder: 'honkhoai',
+            allowed_formats: ['jpg', 'jpeg', 'png', 'webp', 'gif'],
+            transformation: [{ width: 1200, height: 800, crop: 'limit' }]
+        }
+    });
+    console.log('✅ Cloudinary storage configured');
+} catch (error) {
+    console.error('❌ Cloudinary storage error:', error.message);
+}
+
+const upload = multer({ 
+    storage: storage,
+    limits: { fileSize: 5 * 1024 * 1024 } // 5MB limit
+});
 
 // Upload single image
 export const uploadSingleImage = upload.single('image');
@@ -32,6 +48,9 @@ export const uploadMultipleImages = upload.array('images', 10);
 
 // Upload handler
 export const handleUpload = async (req, res) => {
+    console.log('handleUpload called');
+    console.log('req.file:', req.file);
+    
     try {
         if (!req.file) {
             return res.status(400).json({ error: 'No file uploaded' });
@@ -45,7 +64,7 @@ export const handleUpload = async (req, res) => {
         });
     } catch (error) {
         console.error('Upload error:', error);
-        res.status(500).json({ error: error.message });
+        res.status(500).json({ error: error.message, stack: error.stack });
     }
 };
 
