@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { ArrowRight, Calendar } from "lucide-react";
-import { Link } from "react-router-dom";
 
 export function HpBlog() {
   const [posts, setPosts] = useState<any[]>([]);
@@ -56,7 +55,11 @@ export function HpBlog() {
               style={{ boxShadow: "0 8px 32px rgba(10,61,98,0.08)" }}
             >
               <div className="relative overflow-hidden bg-sky-100" style={{ height: "200px" }}>
-                <img src={post.featured_image || "https://images.unsplash.com/photo-1780397566138-50945af79e24?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=600&h=220&q=80"} alt={post.title} className="w-full h-full object-cover transition-transform duration-500 hover:scale-105" />
+                <img 
+                  src={post.featured_image || "https://images.unsplash.com/photo-1780397566138-50945af79e24?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=600&h=220&q=80"} 
+                  alt={post.title} 
+                  className="w-full h-full object-cover transition-transform duration-500 hover:scale-105" 
+                />
                 <div className="absolute top-3 left-3">
                   <span
                     className="px-3 py-1 rounded-full text-xs font-semibold text-white"
@@ -86,16 +89,18 @@ export function HpBlog() {
                 >
                   <div className="flex items-center gap-1.5" style={{ color: "#555F6B" }}>
                     <Calendar size={12} />
-                    <span style={{ fontFamily: "Inter, sans-serif", fontSize: "12px" }}>{formatDate(post.published_at || post.created_at)}</span>
+                    <span style={{ fontFamily: "Inter, sans-serif", fontSize: "12px" }}>
+                      {formatDate(post.published_at || post.created_at)}
+                    </span>
                   </div>
-                  <Link
-                    to={`/blog/${post.slug}`}
-                    className="inline-flex items-center gap-1 font-semibold text-xs group transition-colors hover:text-blue-800"
-                    style={{ fontFamily: "Inter, sans-serif", color: "#0A3D62" }}
+                  <a
+                    href={`/blog/${post.slug}`}
+                    className="inline-flex items-center gap-1 font-semibold text-xs group transition-colors hover:text-blue-800 no-underline"
+                    style={{ fontFamily: "Inter, sans-serif", color: "#0A3D62", textDecoration: "none" }}
                   >
                     Đọc Thêm
                     <ArrowRight size={12} className="transition-transform group-hover:translate-x-1" />
-                  </Link>
+                  </a>
                 </div>
               </div>
             </div>
@@ -103,14 +108,20 @@ export function HpBlog() {
         </div>
 
         <div className="flex justify-center mt-10">
-          <Link
-            to="/news"
-            className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full font-semibold text-sm transition-all duration-200 hover:bg-blue-900 hover:text-white group"
-            style={{ border: "2px solid #0A3D62", color: "#0A3D62", fontFamily: "Inter, sans-serif", background: "transparent" }}
+          <a
+            href="/news"
+            className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full font-semibold text-sm transition-all duration-200 hover:bg-blue-900 hover:text-white group no-underline"
+            style={{ 
+              border: "2px solid #0A3D62", 
+              color: "#0A3D62", 
+              fontFamily: "Inter, sans-serif", 
+              background: "transparent",
+              textDecoration: "none"
+            }}
           >
             Xem Tất Cả Bài Viết
             <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
-          </Link>
+          </a>
         </div>
       </div>
     </section>

@@ -1,4 +1,5 @@
 import pool from '../config/database.js';
+import slugify from 'slugify'; 
 
 // GET /api/tours - Get all tours (public)
 export const getTours = async (req, res) => {
