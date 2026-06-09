@@ -1,9 +1,14 @@
 import express from 'express';
 import { getTours, getTourBySlug } from '../controllers/tourController.js';
+import { createTour, updateTour, deleteTour } from '../controllers/tourController.js';
+import { protect, adminOnly } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
 router.get('/', getTours);
 router.get('/:slug', getTourBySlug);
+router.post('/', protect, adminOnly, createTour);
+router.put('/:id', protect, adminOnly, updateTour);
+router.delete('/:id', protect, adminOnly, deleteTour);
 
 export default router;
