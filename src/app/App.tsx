@@ -19,6 +19,8 @@ import AdminTestimonials from "./admin/pages/Testimonials";
 import AdminGallery from "./admin/pages/Gallery";
 import Settings from "./admin/pages/Settings";
 import AdminLoginPage from "./admin/pages/AdminLoginPage";
+import LoginPage from "./pages/LoginPage";
+import MyBookingsPage from "./pages/MyBookingsPage";
 
 export default function App() {
   console.log("✅ App component đang render!");
@@ -34,6 +36,9 @@ export default function App() {
         <Route path="/news" element={<NewsBlogPage />} />
         <Route path="/news/:id" element={<ArticleDetailPage />} />
         <Route path="/contact" element={<ContactPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/my-bookings" element={<MyBookingsPage />} />
+        <Route path="/profile" element={<MyBookingsPage />} /> {/* Tạm thời redirect */}  
         
         {/* Admin routes */}
         <Route path="/admin/login" element={<AdminLoginPage />} />

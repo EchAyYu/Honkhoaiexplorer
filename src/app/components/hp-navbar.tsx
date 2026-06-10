@@ -1,25 +1,53 @@
 import { useState, useEffect } from "react";
 import { Compass, Phone, ChevronDown } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { UserMenu } from "./UserMenu";
 
 const navLinks = [
-  { label: "Trang Chủ", active: true, dropdown: false, href: "/" },
-  { label: "Giới Thiệu", active: false, dropdown: false, href: "/about" },
-  { label: "Tour Du Lịch", active: false, dropdown: true, href: "/tours" },
-  { label: "Thông Tin", active: false, dropdown: false, href: "/info" },
-  { label: "Tin Tức", active: false, dropdown: false, href: "/news" },
-  { label: "Liên Hệ", active: false, dropdown: false, href: "/contact" },
+  { label: "Trang Chủ", href: "/" },
+  { label: "Giới Thiệu", href: "/about" },
+  { label: "Tour Du Lịch", href: "/tours", dropdown: true },
+  { label: "Thông Tin", href: "/info" },
+  { label: "Tin Tức", href: "/news" },
+  { label: "Liên Hệ", href: "/contact" },
 ];
 
 export function HpNavbar() {
+  const location = useLocation();
+  const navigate = useNavigate();
   const [scrolled, setScrolled] = useState(false);
   const [lang, setLang] = useState<"VI" | "EN">("VI");
+  const [user, setUser] = useState<any>(null);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  useEffect(() => {
+    // Kiểm tra user đã đăng nhập
+    const token = localStorage.getItem("token");
+    const userData = localStorage.getItem("user");
+    if (token && userData) {
+      setUser(JSON.parse(userData));
+    } else {
+      setUser(null);
+    }
+  }, [location.pathname]); // Re-check khi chuyển trang
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    setUser(null);
+    navigate("/");
+    window.location.reload();
+  };
+
+  const isActive = (href: string) => {
+    if (href === "/") return location.pathname === "/";
+    return location.pathname.startsWith(href);
+  };
 
   return (
     <nav
@@ -65,7 +93,7 @@ export function HpNavbar() {
         {/* Nav links */}
         <div className="hidden lg:flex items-center gap-7">
           {navLinks.map((link) => {
-            const isActive = window.location.pathname === link.href || (link.href === '/' && window.location.pathname === '') || (link.href !== '/' && link.href.startsWith('/') && window.location.pathname.startsWith(link.href));
+            const active = isActive(link.href);
             return (
               <Link
                 key={link.label}
@@ -73,16 +101,15 @@ export function HpNavbar() {
                 className="flex items-center gap-1 text-sm relative group transition-colors duration-150"
                 style={{
                   fontFamily: "Inter, sans-serif",
-                  color: isActive ? "#F39C12" : "rgba(255,255,255,0.85)",
-                  fontWeight: isActive ? 600 : 400,
+                  color: active ? "#F39C12" : "rgba(255,255,255,0.85)",
+                  fontWeight: active ? 600 : 400,
                 }}
               >
                 {link.label}
                 {link.dropdown && <ChevronDown size={13} />}
-                {/* hover underline */}
                 <span
                   className="absolute -bottom-1 left-0 h-px bg-amber-400 transition-all duration-300 group-hover:w-full"
-                  style={{ width: isActive ? "100%" : "0" }}
+                  style={{ width: active ? "100%" : "0" }}
                 />
               </Link>
             );
@@ -116,19 +143,32 @@ export function HpNavbar() {
             </button>
           </div>
 
-          {/* CTA button */}
-          <a
-            href="#"
-            className="hidden md:inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-200 hover:brightness-110 active:scale-95"
-            style={{
-              backgroundColor: "#F39C12",
-              color: "#1A1A2E",
-              fontFamily: "Inter, sans-serif",
-            }}
-          >
-            <Phone size={14} />
-            Đặt Tour Ngay
-          </a>
+          {/* User menu hoặc nút đăng nhập */}
+          {user ? (
+            <UserMenu user={user} onLogout={handleLogout} />
+          ) : (
+            <div className="flex items-center gap-3">
+              <Link
+                to="/login"
+                className="px-4 py-2 text-sm font-semibold text-white/80 hover:text-white transition-colors"
+                style={{ fontFamily: "Inter, sans-serif" }}
+              >
+                Đăng Nhập
+              </Link>
+              <Link
+                to="/login"
+                className="hidden md:inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-200 hover:brightness-110 active:scale-95"
+                style={{
+                  backgroundColor: "#F39C12",
+                  color: "#1A1A2E",
+                  fontFamily: "Inter, sans-serif",
+                }}
+              >
+                <Phone size={14} />
+                Đặt Tour Ngay
+              </Link>
+            </div>
+          )}
         </div>
       </div>
     </nav>
